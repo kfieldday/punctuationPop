@@ -2,21 +2,30 @@
 	<head>
 		<title>Punctiation POP</title>
 		<style>
-			#enabled {
-				
-				position: absolute;
-				font-size: 72px;
-			}
 			.button {
 				background-color: transparent; 
 				transition-duration: 0.4s;
 				display: inline-block;
 				border-radius: 50%;
 				padding: 25px 50px;
+				text-shadow: 0px 0px;
+			}
+			.Multi {
+				background-color: transparent; 
+				transition-duration: 0.4s;
+				display: inline-block;
+				border-radius: 50%;
+				padding: 25px 50px;
+				text-shadow: 0px 0px 20px red;
 			}
 			.button:hover{
 				//background-color: grey;
 				cursor: pointer;
+			}
+			#enabled {
+				
+				position: absolute;
+				font-size: 72px;
 			}
 			#disabled{
 				padding: 0px;
@@ -50,7 +59,6 @@
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
 			const Puncs = ['.', '?', '!','?!'];
-			var i;
 			var span=[];
 			var winWidth;
 			var winHeight;
@@ -60,13 +68,14 @@
 			var score = 0;
 			var scaler = 1;
 			var winscale = .15;
-			var comma = [];
-			//document.getElementById("example").innerHTML = div.offsetHeight;
-			startTimer(30, document.getElementById("Timer"));
-			async function Movebutton(e){
+			var maxPuncs = 15;
+			var commaTime = [getRandomNumber(10,20),getRandomNumber(10,20)];
+			startTimer(30, document.getElementById("Timer")); //Start Timer
+			
+			async function Movebutton(e){ //UPDATE BUTTON LOCATION
 				
-				console.log(e);
-				i = getRandomNumber(0,100);
+				//console.log(e);
+				var i = getRandomNumber(0,100);
 				switch (true){
 					case (i<40): //period
 						span[e].style.color = "black";
@@ -103,7 +112,7 @@
 				return Math.floor(Math.random() * (max - min)+min);
 			}
 			
-			async function UpdateScoreBoard(button){
+			async function UpdateScoreBoard(button){ //SCOREBOARD
 				
 				switch (span[button].innerHTML){
 					case ".": //period
@@ -118,9 +127,6 @@
 					case "?!": //interrobang
 						score = score + 100*scaler;
 						break;
-					case ",": //comma
-						scaler = 2;
-						break;
 				}
 				span[button].innerHTML = " ";
 				span[button].id = "disabled";
@@ -128,7 +134,7 @@
 				setTimeout(function(){Movebutton(button);}, 3000);
 			}
 			
-			function Endgame(){
+			function Endgame(){  //END GAME
 				alert("Game Over! Your score is: "+score);
 			}
 			function startTimer(duration, display) {
@@ -141,18 +147,56 @@
 					seconds = seconds < 10 ? "0" + seconds : seconds;
 
 					display.textContent = minutes + ":" + seconds;
-
+					if (timer == commaTime[0] || timer == commaTime[1]){
+						spawnComma();
+					}
 					if (--timer < 0) {
 						Endgame();
 					}
 				}, 1000);
 			}
-			for(let butcount=0;butcount<15;butcount++){ //create buttons
+			function spawnComma(){  //COMMA MULTIPLYER
+				var i = getRandomNumber(0,100);
+				comma = document.createElement("span")
+				document.body.appendChild(comma);
+				comma.classList.add("button");
+				comma.style.color = "red";
+				comma.style.padding = "0px 50px 30px 50px";
+				comma.innerHTML = ","
+				comma.id = "enabled";
+				winWidth = window.innerWidth - comma.offsetWidth-(window.innerWidth*winscale);
+				winHeight = window.innerHeight - comma.offsetHeight-(window.innerHeight*winscale);
+				randomTop = getRandomNumber((window.innerHeight*winscale), winHeight);
+				randomLeft = getRandomNumber((window.innerWidth*winscale), winWidth);
+				comma.style.top = randomTop + "px";
+				comma.style.left = randomLeft + "px";
+				comma.addEventListener("click", function(){
+					comma.remove();
+					scaler = 2;
+					
+					
+					//console.log(buttons);
+					for(let i=0;i<maxPuncs;i++){
+						span[i].classList.remove("button");
+						span[i].classList.add("Multi");
+					}
+					
+					setTimeout(function () {
+						scaler = 1;
+						for(i=0;i<maxPuncs;i++){
+							span[i].classList.remove("Multi");
+							span[i].classList.add("button");
+							console.log(i);
+						}
+					},5000);
+				});
+			}
+			for(let butcount=0;butcount<maxPuncs;butcount++){ //create buttons
 				span.push(document.createElement("span"));
 				document.body.appendChild(span[butcount]);
 				span[butcount].classList.add("button");
-				//span[butcount].onclick = Movebutton(butcount);
-				i = getRandomNumber(0,4);
+				
+				var i = getRandomNumber(0,4);
 				switch (i){
 					case 0:
 						span[butcount].style.color = "black";
@@ -178,10 +222,10 @@
 				span[butcount].style.top = randomTop + "px";
 				span[butcount].style.left = randomLeft + "px";
 				
-				//timer = window.setTimeout(Movebutton(butcount), 3000);
+				
 			}
 			span.forEach((item, index) => {
-				//item.addEventListener("click", function(){setTimeout(function(){Movebutton(index);}, 3000);});
+				
 				item.addEventListener("click", function(){UpdateScoreBoard(index);});
 				
 				});

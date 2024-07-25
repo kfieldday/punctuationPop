@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+	<head>
+		<title>Punctiation POP</title>
+		<style>
+			#enabled {
+				
+				position: absolute;
+				font-size: 72px;
+			}
+			.button {
+				background-color: transparent; 
+				transition-duration: 0.4s;
+				display: inline-block;
+				border-radius: 50%;
+				padding: 25px 50px;
+			}
+			.button:hover{
+				//background-color: grey;
+				cursor: pointer;
+			}
+			#disabled{
+				padding: 0px;
+				background-color: transparent;
+			}
+			#disabled:hover{
+				background-color: transparent;
+				cursor: default;
+			}
+			div {
+				display: inline-block;
+				margin: 5%;
+				border-color: red;
+				border-size: 1px;
+				width: 90%;
+				height: 80%;
+				max-height: 100%;
+				border-style:solid;
+				position: absolute;
+				
+				
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<p>Time Left:<p id="Timer"></p></p>
+			<p> Score:</p>
+			<p id="example">You can do it!</p>
+		</div>
+		<script type="application/javascript">
+			//CODED BY KENNY SCOFIELD
+			const Puncs = ['.', '?', '!','?!'];
+			var i;
+			var span=[];
+			var winWidth;
+			var winHeight;
+			var timer;
+			var randomTop;
+			var randomLeft;
+			var score = 0;
+			var scaler = 1;
+			var winscale = .15;
+			var comma = [];
+			//document.getElementById("example").innerHTML = div.offsetHeight;
+			startTimer(30, document.getElementById("Timer"));
+			async function Movebutton(e){
+				
+				console.log(e);
+				i = getRandomNumber(0,100);
+				switch (true){
+					case (i<40): //period
+						span[e].style.color = "black";
+						span[e].style.padding = "0px 50px 30px 50px";
+						i=0;
+						break;
+					case (i<70): //question
+						span[e].style.color = "green";
+						i=1;
+						break;
+					case (i<90): //exclamation
+						span[e].style.color = "blue";
+						i=2;
+						break;
+					case (i<100): //interrobang
+						span[e].style.color = "red";
+						i=3;
+						break;
+				}
+				
+				span[e].innerHTML = Puncs[i];
+				span[e].id = "enabled";
+				winWidth = window.innerWidth - span[e].offsetWidth-(window.innerWidth*winscale);
+				winHeight = window.innerHeight - span[e].offsetHeight-(window.innerHeight*winscale);
+				randomTop = getRandomNumber((window.innerHeight*winscale), winHeight);
+				randomLeft = getRandomNumber((window.innerWidth*winscale), winWidth);
+				span[e].style.top = randomTop + "px";
+				span[e].style.left = randomLeft + "px";
+				
+				
+			}
+
+			function getRandomNumber(min, max) {
+				return Math.floor(Math.random() * (max - min)+min);
+			}
+			
+			async function UpdateScoreBoard(button){
+				
+				switch (span[button].innerHTML){
+					case ".": //period
+						score = score + 10*scaler;
+						break;
+					case "?": //question
+						score = score + 25*scaler;
+						break;
+					case "!": //exclamation
+						score = score + 50*scaler;
+						break;
+					case "?!": //interrobang
+						score = score + 100*scaler;
+						break;
+					case ",": //comma
+						scaler = 2;
+						break;
+				}
+				span[button].innerHTML = " ";
+				span[button].id = "disabled";
+				document.getElementById("example").innerHTML = score;
+				setTimeout(function(){Movebutton(button);}, 3000);
+			}
+			
+			function Endgame(){
+				alert("Game Over! Your score is: "+score);
+			}
+			function startTimer(duration, display) {
+				var timer = duration, minutes, seconds;
+				setInterval(function () {
+					minutes = parseInt(timer / 60, 10);
+					seconds = parseInt(timer % 60, 10);
+
+					minutes = minutes < 10 ? "0" + minutes : minutes;
+					seconds = seconds < 10 ? "0" + seconds : seconds;
+
+					display.textContent = minutes + ":" + seconds;
+
+					if (--timer < 0) {
+						Endgame();
+					}
+				}, 1000);
+			}
+			for(let butcount=0;butcount<15;butcount++){ //create buttons
+				span.push(document.createElement("span"));
+				document.body.appendChild(span[butcount]);
+				span[butcount].classList.add("button");
+				//span[butcount].onclick = Movebutton(butcount);
+				i = getRandomNumber(0,4);
+				switch (i){
+					case 0:
+						span[butcount].style.color = "black";
+						span[butcount].style.padding = "0px 50px 30px 50px";
+						break;
+					case 1:
+						span[butcount].style.color = "green";
+						break;
+					case 2:
+						span[butcount].style.color = "blue";
+						break;
+					case 3:
+						span[butcount].style.color = "red";
+						break;
+				}
+				
+				span[butcount].innerHTML = Puncs[i];
+				span[butcount].id = "enabled";
+				winWidth = window.innerWidth - span[butcount].offsetWidth-(window.innerWidth*winscale);
+				winHeight = window.innerHeight - span[butcount].offsetHeight-(window.innerHeight*winscale);
+				randomTop = getRandomNumber((window.innerHeight*winscale), winHeight);
+				randomLeft = getRandomNumber((window.innerWidth*winscale), winWidth);
+				span[butcount].style.top = randomTop + "px";
+				span[butcount].style.left = randomLeft + "px";
+				
+				//timer = window.setTimeout(Movebutton(butcount), 3000);
+			}
+			span.forEach((item, index) => {
+				//item.addEventListener("click", function(){setTimeout(function(){Movebutton(index);}, 3000);});
+				item.addEventListener("click", function(){UpdateScoreBoard(index);});
+				
+				});
+			
+			
+			
+
+		</script>
+	</body>
+</html>

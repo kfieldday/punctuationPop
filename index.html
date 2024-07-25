@@ -2,6 +2,11 @@
 	<head>
 		<title>Punctiation POP</title>
 		<style>
+			html, body, div, span{
+				-webkit-user-select: none; /* Safari */
+				-ms-user-select: none; /* IE 10 and IE 11 */
+				user-select: none; /* Standard syntax */
+			}
 			.button {
 				background-color: transparent; 
 				transition-duration: 0.4s;
@@ -35,7 +40,7 @@
 				background-color: transparent;
 				cursor: default;
 			}
-			div {
+			#playarea {
 				display: inline-block;
 				margin: 5%;
 				border-color: red;
@@ -46,15 +51,32 @@
 				border-style:solid;
 				position: absolute;
 				
-				
+			}
+			#playarea p {
+				display: grid;
+				padding: 0px 0px 0px 10px;
+			}
+			#key {
+				display:inline-block;
+				top: 10%;
+				left: 90%;
+				position: absolute;
+				font-size: 20px;
 			}
 		</style>
 	</head>
 	<body>
-		<div>
-			<p>Time Left:<p id="Timer"></p></p>
-			<p> Score:</p>
-			<p id="example">You can do it!</p>
+		<div id="playarea">
+			<p><b>Time Left:</b><p id="Timer"></p></p>
+			<p><b>Score:</b></p>
+			<p id="score">You can do it!</p>
+		</div>
+		<div id="key">
+			<p style="color:black;">. = 10pts</p>
+			<p style="color:green;">? = 25pts</p>
+			<p style="color:blue;">. = 50pts</p>
+			<p style="color:red;">. = 100pts</p>
+			<p style="color:red;">, = x2</p>
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
@@ -71,10 +93,17 @@
 			var winscale = .15;
 			var maxPuncs = 15;
 			var commaTime = [getRandomNumber(10,20),getRandomNumber(10,20)];
+			
+			
 			startTimer(30, document.getElementById("Timer")); //Start Timer
 			
+			function clampNumber(num, a, b){ //clamp(n, min, max)
+				return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
+			} 
+			
 			async function Movebutton(e){ //UPDATE BUTTON LOCATION
-				
+				var fontS = 96;
+				span[e].style.fontSize = fontS + "px";
 				//console.log(e);
 				var i = getRandomNumber(0,100);
 				switch (true){
@@ -106,7 +135,12 @@
 				span[e].style.top = randomTop + "px";
 				span[e].style.left = randomLeft + "px";
 				
-				
+				/*setInterval(function(){
+					fontS = clampNumber(fontS - 1, 36, 96);
+					
+					span[e].style.fontSize = fontS + "px";
+					
+				},100);*/
 			}
 
 			function getRandomNumber(min, max) {
@@ -131,12 +165,13 @@
 				}
 				span[button].innerHTML = " ";
 				span[button].id = "disabled";
-				document.getElementById("example").innerHTML = score;
+				document.getElementById("score").innerHTML = score;
 				setTimeout(function(){Movebutton(button);}, 3000);
 			}
 			
 			function Endgame(){  //END GAME
-				alert("Game Over! Your score is: "+score);
+				alert("Game Over! Your score is: "+score +"\n Refresh page to play again!");
+				//clearInterval();
 			}
 			function startTimer(duration, display) {
 				var timer = duration, minutes, seconds;
@@ -187,7 +222,7 @@
 						for(i=0;i<maxPuncs;i++){
 							span[i].classList.remove("Multi");
 							span[i].classList.add("button");
-							console.log(i);
+							
 						}
 					},5000);
 				});

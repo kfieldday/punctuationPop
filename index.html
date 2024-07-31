@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 	<head>
-		<title>Punctiation POP v1.1.3</title>
+		<title>Punctiation POP v1.1.4</title>
 		<meta name="viewport" content="width=device-width, intial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 		<style>
 			html, body, div, span{
@@ -100,7 +100,7 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.1.3 - alpha
+			//VERSION: 1.1.4 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
@@ -113,7 +113,7 @@
 			var scaler = 1;
 			var winscale = .15;
 			var maxPuncs = 15;
-			var commaTime = [getRandomNumber(10,20),getRandomNumber(10,20)];
+			var commaTime = [getRandomNumber(5,20),getRandomNumber(7,22)];
 			var ScoreBar = 1000;
 			
 			
@@ -196,6 +196,7 @@
 				if(score>ScoreBar){
 						timer=timer+2;
 						ScoreBar=ScoreBar+1000;
+						commaTime = [getRandomNumber(5,30),getRandomNumber(10,35)];
 					}
 				span[button].innerHTML = " ";
 				span[button].id = "disabled";

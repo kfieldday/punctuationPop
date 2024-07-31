@@ -100,7 +100,7 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.1.0 - alpha
+			//VERSION: 1.1.1 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
@@ -172,7 +172,9 @@
 			}
 			
 			async function UpdateScoreBoard(button){ //SCOREBOARD
-				//console.log(span[button].style.zIndex);
+				if(timer<=-1){
+					return;
+				}
 				switch (span[button].innerHTML){
 					case ".": //period
 						score = score + 10*scaler;

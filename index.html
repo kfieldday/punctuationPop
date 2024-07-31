@@ -14,19 +14,37 @@
 				display: inline-block;
 				border-radius: 50%;
 				padding: 25px 50px;
-				text-shadow: 0px 0px;
+				//text-shadow: 0px 0px;
+				position:absolute;
 			}
 			.Multi {
-				background-color: transparent; 
-				transition-duration: 0.4s;
-				display: inline-block;
-				border-radius: 50%;
-				padding: 25px 50px;
+				//background-color: transparent; 
+				//transition-duration: 0.4s;
+				//display: inline-block;
+				//border-radius: 50%;
+				//padding: 25px 50px;
 				text-shadow: 0px 0px 20px red;
 			}
 			.button:hover{
 				//background-color: grey;
 				cursor: pointer;
+			}
+			.period{
+				color: black;
+				padding: 0px 50px 30px 50px;
+				z-index: 1;
+			}
+			.question{
+				color: green;
+				z-index: 2;
+			}
+			.exclamation{
+				color: blue;
+				z-index: 3;
+			}
+			.interro {
+				color: red;
+				z-index: 4;
 			}
 			#enabled {
 				
@@ -64,11 +82,12 @@
 				position: absolute;
 				font-size: 20px;
 			}
+			
 		</style>
 	</head>
 	<body>
 		<div id="playarea">
-			<p><b>Time Left:</b><p id="Timer"></p></p>
+			<p><b>Time Left:</b><p id="Timer">Click anywhere to start!</p></p>
 			<p><b>Score:</b></p>
 			<p id="score">You can do it!</p>
 		</div>
@@ -81,7 +100,8 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.0.0 - alpha
+			//VERSION: 1.1.0 - alpha
+			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
 			var winWidth;
@@ -94,35 +114,38 @@
 			var winscale = .15;
 			var maxPuncs = 15;
 			var commaTime = [getRandomNumber(10,20),getRandomNumber(10,20)];
+			var ScoreBar = 1000;
 			
 			
-			startTimer(30, document.getElementById("Timer")); //Start Timer
+			document.body.addEventListener("click", function (){
+				startTimer(document.getElementById("Timer"));
+				this.removeEventListener("click",arguments.callee,false);
+			}); //Start Timer
 			
 			function clampNumber(num, a, b){ //clamp(n, min, max)
 				return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
 			} 
 			
 			async function Movebutton(e){ //UPDATE BUTTON LOCATION
-				var fontS = 96;
+				var fontS = getRandomNumber(72,96);
 				span[e].style.fontSize = fontS + "px";
 				//console.log(e);
 				var i = getRandomNumber(0,100);
 				switch (true){
 					case (i<40): //period
-						span[e].style.color = "black";
-						span[e].style.padding = "0px 50px 30px 50px";
+						span[e].classList.add("period");
 						i=0;
 						break;
 					case (i<70): //question
-						span[e].style.color = "green";
+						span[e].classList.add("question");
 						i=1;
 						break;
 					case (i<90): //exclamation
-						span[e].style.color = "blue";
+						span[e].classList.add("exclamation");
 						i=2;
 						break;
 					case (i<100): //interrobang
-						span[e].style.color = "red";
+						span[e].classList.add("interro");
 						i=3;
 						break;
 				}
@@ -136,7 +159,7 @@
 				span[e].style.top = randomTop + "px";
 				span[e].style.left = randomLeft + "px";
 				
-				/*setInterval(function(){
+				/*setInterval(function(){ //minimize font size over time
 					fontS = clampNumber(fontS - 1, 36, 96);
 					
 					span[e].style.fontSize = fontS + "px";
@@ -149,37 +172,46 @@
 			}
 			
 			async function UpdateScoreBoard(button){ //SCOREBOARD
-				
+				//console.log(span[button].style.zIndex);
 				switch (span[button].innerHTML){
 					case ".": //period
 						score = score + 10*scaler;
+						span[button].classList.remove("period");
 						break;
 					case "?": //question
 						score = score + 25*scaler;
+						span[button].classList.remove("question");
 						break;
 					case "!": //exclamation
 						score = score + 50*scaler;
+						span[button].classList.remove("exclamation");
 						break;
 					case "?!": //interrobang
 						score = score + 100*scaler;
+						span[button].classList.remove("interro");
 						break;
 				}
+				if(score>ScoreBar){
+						timer=timer+3;
+						ScoreBar=ScoreBar+1000;
+					}
 				span[button].innerHTML = " ";
 				span[button].id = "disabled";
 				document.getElementById("score").innerHTML = score;
-				setTimeout(function(){Movebutton(button);}, 3000);
+				setTimeout(function(){Movebutton(button);}, 1000);
 			}
 			
 			function Endgame(){  //END GAME
 				alert("Game Over! Your score is: "+score +"\n Refresh page to play again!");
 				//clearInterval();
 			}
-			function startTimer(duration, display) {
-				var timer = duration, minutes, seconds;
-				setInterval(function () {
+			function startTimer(display) {
+				
+				var mytimer = setInterval(function () {
+					
 					minutes = parseInt(timer / 60, 10);
 					seconds = parseInt(timer % 60, 10);
-
+					
 					minutes = minutes < 10 ? "0" + minutes : minutes;
 					seconds = seconds < 10 ? "0" + seconds : seconds;
 
@@ -187,8 +219,10 @@
 					if (timer == commaTime[0] || timer == commaTime[1]){
 						spawnComma();
 					}
-					if (--timer < 0) {
+					if (--timer < -1) {
 						Endgame();
+						clearInterval(mytimer);
+						display.textContent = "00:00";
 					}
 				}, 1000);
 			}
@@ -207,23 +241,21 @@
 				randomLeft = getRandomNumber((window.innerWidth*winscale), winWidth);
 				comma.style.top = randomTop + "px";
 				comma.style.left = randomLeft + "px";
+				comma.style.zIndex = 4;
 				comma.addEventListener("click", function(){
-					comma.remove();
-					scaler = 2;
+					this.remove();
+					scaler = scaler*2;
+					var shadowdist = function(a){ return "0px 0px "+((a)**2)+ "px red";};
 					
-					
-					//console.log(buttons);
+					//console.log(shadowdist(scaler));
 					for(let i=0;i<maxPuncs;i++){
-						span[i].classList.remove("button");
-						span[i].classList.add("Multi");
+						span[i].style.textShadow = shadowdist(scaler);
 					}
 					
 					setTimeout(function () {
-						scaler = 1;
+						scaler = scaler/2;
 						for(i=0;i<maxPuncs;i++){
-							span[i].classList.remove("Multi");
-							span[i].classList.add("button");
-							
+							span[i].style.textShadow = shadowdist(scaler);
 						}
 					},5000);
 				});
@@ -236,17 +268,16 @@
 				var i = getRandomNumber(0,4);
 				switch (i){
 					case 0:
-						span[butcount].style.color = "black";
-						span[butcount].style.padding = "0px 50px 30px 50px";
+						span[butcount].classList.add("period");
 						break;
 					case 1:
-						span[butcount].style.color = "green";
+						span[butcount].classList.add("question");
 						break;
 					case 2:
-						span[butcount].style.color = "blue";
+						span[butcount].classList.add("exclamation");
 						break;
 					case 3:
-						span[butcount].style.color = "red";
+						span[butcount].classList.add("interro");
 						break;
 				}
 				

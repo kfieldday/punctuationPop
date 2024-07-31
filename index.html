@@ -100,7 +100,7 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.1.1 - alpha
+			//VERSION: 1.1.2 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
@@ -194,7 +194,7 @@
 						break;
 				}
 				if(score>ScoreBar){
-						timer=timer+3;
+						timer=timer+1;
 						ScoreBar=ScoreBar+1000;
 					}
 				span[button].innerHTML = " ";
@@ -243,7 +243,7 @@
 				randomLeft = getRandomNumber((window.innerWidth*winscale), winWidth);
 				comma.style.top = randomTop + "px";
 				comma.style.left = randomLeft + "px";
-				comma.style.zIndex = 4;
+				comma.style.zIndex = 2;
 				comma.addEventListener("click", function(){
 					this.remove();
 					scaler = scaler*2;

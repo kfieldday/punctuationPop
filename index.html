@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 	<head>
-		<title>Punctiation POP v1.1.7</title>
+		<title>Punctiation POP v1.2.0</title>
 		<meta name="viewport" content="width=device-width, intial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 		<style>
 			html, body, div, span{
@@ -100,21 +100,30 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.1.7 - alpha
+			//VERSION: 1.2.0 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
 			var winWidth;
 			var winHeight;
-			var timer;
 			var randomTop;
 			var randomLeft;
 			var score = 0;
 			var scaler = 1;
 			var winscale = .15;
 			var maxPuncs = 15;
-			var commaTime = [getRandomNumber(10,20),getRandomNumber(12,22)];
 			var ScoreBar = 1000;
+			var TimeBonus = 2;
+			var commaTime = getCommaTime(0, 0);
+			
+			function getCommaTime(offsetX, offsetY){
+				let a = getRandomNumber(timer-20-offsetX,timer-10+offsetX);
+				let b = getRandomNumber(timer-18-offsetY,timer-8+offsetY);
+				while (a >= b-TimeBonus && a <= b+TimeBonus){
+					b = getRandomNumber(timer-18-offsetY,timer-8+offsetY);
+				} 
+				return [a,b];
+			}
 			
 			
 			document.body.addEventListener("click", function (){
@@ -175,6 +184,7 @@
 				if(timer<-1){
 					return;
 				}
+				//console.log("reset commas");
 				switch (span[button].innerHTML){
 					case ".": //period
 						score = score + 10*scaler;
@@ -194,10 +204,12 @@
 						break;
 				}
 				if(score>ScoreBar){
-						timer=timer+2;
+						timer=timer+TimeBonus;
 						ScoreBar=ScoreBar+1000;
-						if (commaTime[0]+5 >Timer && commaTime[1]+5 >Timer){
-							commaTime = [getRandomNumber(Timer-30,Timer-5),getRandomNumber(Timer-20,Timer-10)];
+						
+						if (commaTime[0] >timer && commaTime[1] >timer){
+							commaTime = getCommaTime(5, 2);
+							//console.log("reset commas at "+score);
 						}
 						
 					}
@@ -214,7 +226,7 @@
 			function startTimer(display) {
 				
 				var mytimer = setInterval(function () {
-					
+					console.log(commaTime+" - "+timer);
 					minutes = parseInt(timer / 60, 10);
 					seconds = parseInt(timer % 60, 10);
 					
@@ -233,7 +245,7 @@
 				}, 1000);
 			}
 			function spawnComma(){  //COMMA MULTIPLYER
-				var i = getRandomNumber(0,100);
+				//var i = getRandomNumber(0,100);
 				comma = document.createElement("span")
 				document.body.appendChild(comma);
 				comma.classList.add("button");
@@ -260,7 +272,7 @@
 					
 					setTimeout(function () {
 						scaler = scaler/2;
-						for(i=0;i<maxPuncs;i++){
+						for(let i=0;i<maxPuncs;i++){
 							span[i].style.textShadow = shadowdist(scaler);
 						}
 					},5000);

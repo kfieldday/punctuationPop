@@ -79,9 +79,9 @@
 		</style>
 	</head>
 	<body>
-		<h3> Punctuation Pop! v1.4.0 alpha</h3>
+		<h3> Punctuation Pop! v1.4.1 alpha</h3>
 		<div id="playarea">
-			<p id="Timer"><b>Time Left: </b> Click/tap to start!</p>
+			<p id="Timer"><b>Time Left: </b> Tap to start!</p>
 			<p id="score"><b>Score:</b> You can do it!</p>
 			<div id="key">
 				<span style="color:black;">. = 10pts</span></br>
@@ -93,7 +93,7 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.4.0 - alpha
+			//VERSION: 1.4.1 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
@@ -193,7 +193,6 @@
 				}
 				span[button].id = "disabled";
 				clearInterval(span[button].movement);
-				//console.log("reset commas");
 				switch (span[button].innerHTML){
 					case ".": //period
 						score = score + 10*scaler;
@@ -271,16 +270,15 @@
 				comma.style.zIndex = 2;
 				comma.addEventListener("click", function(){
 					this.remove();
-					scaler = scaler*2;
+					scaler = clampNumber(scaler*2,0,8);
 					var shadowdist = function(a){ return "0px 0px "+((a)**2)+ "px red";};
 					
-					//console.log(shadowdist(scaler));
 					for(let i=0;i<maxPuncs;i++){
 						span[i].style.textShadow = shadowdist(scaler);
 					}
 					
 					setTimeout(function () {
-						scaler = scaler/2;
+						scaler = clampNumber(scaler/2,0,8);
 						for(let i=0;i<maxPuncs;i++){
 							span[i].style.textShadow = shadowdist(scaler);
 						}

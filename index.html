@@ -59,7 +59,7 @@
 				padding:0px;
 				border-color: red;
 				width: 90vw;
-				height:90vh;
+				height:80vh;
 				border-style:solid;
 				position: relative;
 				
@@ -79,7 +79,7 @@
 		</style>
 	</head>
 	<body>
-		<h3> Punctuation Pop! v1.3.0 alpha</h3>
+		<h3> Punctuation Pop! v1.4.0 alpha</h3>
 		<div id="playarea">
 			<p id="Timer"><b>Time Left: </b> Click/tap to start!</p>
 			<p id="score"><b>Score:</b> You can do it!</p>
@@ -93,7 +93,7 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.3.0 - alpha
+			//VERSION: 1.4.0 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
@@ -124,6 +124,10 @@
 			function clampNumber(num, a, b){ //clamp(n, min, max)
 				return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
 			} 
+			function getRandomNumber(min, max) {  //RANDOM NUM
+				return Math.floor(Math.random() * (max - min)+min);
+			}
+			
 			
 			async function Movebutton(e){ //UPDATE BUTTON LOCATION
 				var winWidth;
@@ -131,6 +135,7 @@
 				var randomTop;
 				var randomLeft;
 				var fontS;
+				var movement;
 				
 				//console.log(e);
 				var i = getRandomNumber(0,100);
@@ -169,17 +174,25 @@
 					
 					
 				},1000);
+				movement = setInterval(function(){
+					randomTop = clampNumber(parseInt(span[e].style.top) + getRandomNumber(-30, 30),0 , playarea.offsetHeight - span[e].offsetHeight);
+					randomLeft = clampNumber(parseInt(span[e].style.left) + getRandomNumber(-30, 30), 0 ,playarea.offsetWidth - span[e].offsetWidth);
+					
+					span[e].style.top = randomTop + "px";
+					span[e].style.left = randomLeft + "px";
+					
+				},500);
+				return movement;
 			}
 
-			function getRandomNumber(min, max) {
-				return Math.floor(Math.random() * (max - min)+min);
-			}
+			
 			
 			async function UpdateScoreBoard(button){ //punctuation clicked - update SCOREBOARD - spawn new punctuation
 				if(timer<-1){
 					return;
 				}
 				span[button].id = "disabled";
+				clearInterval(span[button].movement);
 				//console.log("reset commas");
 				switch (span[button].innerHTML){
 					case ".": //period

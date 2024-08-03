@@ -79,7 +79,7 @@
 		</style>
 	</head>
 	<body>
-		<h3> Punctuation Pop! v1.4.1 alpha</h3>
+		<h3> Punctuation Pop! v1.4.3 alpha</h3>
 		<div id="playarea">
 			<p id="Timer"><b>Time Left: </b> Tap to start!</p>
 			<p id="score"><b>Score:</b> You can do it!</p>
@@ -93,7 +93,7 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.4.1 - alpha
+			//VERSION: 1.4.3 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
@@ -119,6 +119,7 @@
 			document.body.addEventListener("click", function (){  //WAIT FOR CLICK TO START GAME
 				startTimer(document.getElementById("Timer"));
 				this.removeEventListener("click",arguments.callee,false);
+				StartGame();
 			}); //Start Timer
 			
 			function clampNumber(num, a, b){ //clamp(n, min, max)
@@ -175,15 +176,23 @@
 					
 				},1000);
 				movement = setInterval(function(){
-					randomTop = clampNumber(parseInt(span[e].style.top) + getRandomNumber(-30, 30),0 , playarea.offsetHeight - span[e].offsetHeight);
-					randomLeft = clampNumber(parseInt(span[e].style.left) + getRandomNumber(-30, 30), 0 ,playarea.offsetWidth - span[e].offsetWidth);
+						if (timer>-1){
+							randomTop = clampNumber(parseInt(span[e].style.top) + getRandomNumber(-30, 30),0 , playarea.offsetHeight - span[e].offsetHeight);
+							randomLeft = clampNumber(parseInt(span[e].style.left) + getRandomNumber(-30, 30), 0 ,playarea.offsetWidth - span[e].offsetWidth);
+							
+							span[e].style.top = randomTop + "px";
+							span[e].style.left = randomLeft + "px";
+						}
+						else {
+						clearInterval(movement);
+						}
+						
+					},500);
+				}
+				
+				
 					
-					span[e].style.top = randomTop + "px";
-					span[e].style.left = randomLeft + "px";
-					
-				},500);
-				return movement;
-			}
+			
 
 			
 			
@@ -285,48 +294,51 @@
 					},5000);
 				});
 			}
-			for(let butcount=0;butcount<maxPuncs;butcount++){ //create buttons, begin game
-				var winWidth;
-				var winHeight;
-				var randomTop;
-				var randomLeft;
-				span.push(document.createElement("span"));
-				//document.div.appendChild(span[butcount]);
-				document.getElementById("playarea").appendChild(span[butcount]);
-				span[butcount].classList.add("button");
-				
-				var i = getRandomNumber(0,4);
-				switch (i){
-					case 0:
-						span[butcount].classList.add("period");
-						break;
-					case 1:
-						span[butcount].classList.add("question");
-						break;
-					case 2:
-						span[butcount].classList.add("exclamation");
-						break;
-					case 3:
-						span[butcount].classList.add("interro");
-						break;
+			function StartGame(){
+				for(let butcount=0;butcount<maxPuncs;butcount++){ //create buttons, begin game
+					var winWidth;
+					var winHeight;
+					var randomTop;
+					var randomLeft;
+					span.push(document.createElement("span"));
+					//document.div.appendChild(span[butcount]);
+					document.getElementById("playarea").appendChild(span[butcount]);
+					span[butcount].classList.add("button");
+					
+					var i = getRandomNumber(0,4);
+					switch (i){
+						case 0:
+							span[butcount].classList.add("period");
+							break;
+						case 1:
+							span[butcount].classList.add("question");
+							break;
+						case 2:
+							span[butcount].classList.add("exclamation");
+							break;
+						case 3:
+							span[butcount].classList.add("interro");
+							break;
+					}
+					
+					span[butcount].innerHTML = Puncs[i];
+					span[butcount].id = "enabled";
+					winWidth = playarea.offsetWidth - span[butcount].offsetWidth;
+					winHeight = playarea.offsetHeight - span[butcount].offsetHeight;
+					randomTop = getRandomNumber(0, winHeight);
+					randomLeft = getRandomNumber(0, winWidth);
+					span[butcount].style.top = randomTop + "px";
+					span[butcount].style.left = randomLeft + "px";
+					
+					
 				}
-				
-				span[butcount].innerHTML = Puncs[i];
-				span[butcount].id = "enabled";
-				winWidth = playarea.offsetWidth - span[butcount].offsetWidth;
-				winHeight = playarea.offsetHeight - span[butcount].offsetHeight;
-				randomTop = getRandomNumber(0, winHeight);
-				randomLeft = getRandomNumber(0, winWidth);
-				span[butcount].style.top = randomTop + "px";
-				span[butcount].style.left = randomLeft + "px";
-				
-				
-			}
-			span.forEach((item, index) => {
-				
-				item.addEventListener("click", function(){UpdateScoreBoard(index);});
-				
+				span.forEach((item, index) => {
+					
+					item.addEventListener("click", function(){UpdateScoreBoard(index);});
+					
 				});
+			}
+			
 			
 			
 			

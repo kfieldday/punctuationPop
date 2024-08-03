@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 	<head>
-		<title>Punctiation POP v1.2.0</title>
+		<title>Punctiation Pop!</title>
 		<meta name="viewport" content="width=device-width, intial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 		<style>
 			html, body, div, span{
@@ -9,76 +9,69 @@
 				user-select: none; /* Standard syntax */
 			}
 			.button {
+				
 				background-color: transparent; 
-				transition-duration: 0.4s;
-				display: inline-block;
-				border-radius: 50%;
-				padding: 25px 50px;
-				//text-shadow: 0px 0px;
+				border-radius: 50em;
+				vertical-align:middle;
 				position:absolute;
-			}
-			.Multi {
-				//background-color: transparent; 
-				//transition-duration: 0.4s;
-				//display: inline-block;
-				//border-radius: 50%;
-				//padding: 25px 50px;
-				text-shadow: 0px 0px 20px red;
+				font-size: 24vh;
+				line-height: 15vh;
 			}
 			.button:hover{
-				//background-color: grey;
 				cursor: pointer;
 			}
 			.period{
 				color: black;
-				padding: 0px 50px 30px 50px;
+				padding: 0px 3vw 6vh 3vw;
 				z-index: 1;
 			}
 			.question{
 				color: green;
 				z-index: 2;
+				padding: 0px 2vw;
 			}
 			.exclamation{
 				color: blue;
 				z-index: 3;
+				padding: 0px 2vw;
 			}
 			.interro {
 				color: red;
 				z-index: 4;
+				padding: 0px;
 			}
 			#enabled {
-				
-				position: absolute;
-				font-size: 72px;
+				transition-duration: 0.4s;
+				visibility:visible;
 			}
 			#disabled{
-				padding: 0px;
+				
 				background-color: transparent;
+				visibility:hidden;
 			}
 			#disabled:hover{
 				background-color: transparent;
 				cursor: default;
 			}
 			#playarea {
-				display: inline-block;
-				margin: 5%;
+				
+				margin: auto;
+				padding:0px;
 				border-color: red;
-				border-size: 1px;
-				width: 90%;
-				height: 80%;
-				max-height: 100%;
+				width: 90vw;
+				height:90vh;
 				border-style:solid;
-				position: absolute;
+				position: relative;
 				
 			}
 			#playarea p {
-				display: grid;
+				
 				padding: 0px 0px 0px 10px;
 			}
 			#key {
 				display:inline-block;
-				top: 10%;
-				left: 90%;
+				top: 10px;
+				right: 1%;
 				position: absolute;
 				font-size: 20px;
 			}
@@ -86,28 +79,24 @@
 		</style>
 	</head>
 	<body>
+		<h3> Punctuation Pop! v1.3.0 alpha</h3>
 		<div id="playarea">
-			<p><b>Time Left:</b><p id="Timer">Click anywhere to start!</p></p>
-			<p><b>Score:</b></p>
-			<p id="score">You can do it!</p>
-		</div>
-		<div id="key">
-			<p style="color:black;">. = 10pts</p>
-			<p style="color:green;">? = 25pts</p>
-			<p style="color:blue;">. = 50pts</p>
-			<p style="color:red;">. = 100pts</p>
-			<p style="color:red;">, = x2</p>
+			<p id="Timer"><b>Time Left: </b> Click/tap to start!</p>
+			<p id="score"><b>Score:</b> You can do it!</p>
+			<div id="key">
+				<span style="color:black;">. = 10pts</span></br>
+				<span style="color:green;">? = 25pts</span></br>
+				<span style="color:blue;">! = 50pts</span></br>
+				<span style="color:red;">. = 100pts</span></br>
+				<span style="color:red;">, = x2</span></br>
+			</div>
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.2.0 - alpha
+			//VERSION: 1.3.0 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
-			var winWidth;
-			var winHeight;
-			var randomTop;
-			var randomLeft;
 			var score = 0;
 			var scaler = 1;
 			var winscale = .15;
@@ -115,6 +104,7 @@
 			var ScoreBar = 1000;
 			var TimeBonus = 2;
 			var commaTime = getCommaTime(0, 0);
+			var playarea = document.getElementById("playarea");
 			
 			function getCommaTime(offsetX, offsetY){
 				let a = getRandomNumber(timer-20-offsetX,timer-10+offsetX);
@@ -126,7 +116,7 @@
 			}
 			
 			
-			document.body.addEventListener("click", function (){
+			document.body.addEventListener("click", function (){  //WAIT FOR CLICK TO START GAME
 				startTimer(document.getElementById("Timer"));
 				this.removeEventListener("click",arguments.callee,false);
 			}); //Start Timer
@@ -136,54 +126,60 @@
 			} 
 			
 			async function Movebutton(e){ //UPDATE BUTTON LOCATION
-				var fontS = getRandomNumber(72,96);
-				span[e].style.fontSize = fontS + "px";
+				var winWidth;
+				var winHeight;
+				var randomTop;
+				var randomLeft;
+				var fontS;
+				
 				//console.log(e);
 				var i = getRandomNumber(0,100);
 				switch (true){
 					case (i<40): //period
 						span[e].classList.add("period");
+						fontS = getRandomNumber(12,24);
 						i=0;
 						break;
 					case (i<70): //question
 						span[e].classList.add("question");
+						fontS = getRandomNumber(12,22);
 						i=1;
 						break;
 					case (i<90): //exclamation
 						span[e].classList.add("exclamation");
+						fontS = getRandomNumber(12,20);
 						i=2;
 						break;
 					case (i<100): //interrobang
 						span[e].classList.add("interro");
+						fontS = getRandomNumber(12,18);
 						i=3;
 						break;
 				}
-				
+				span[e].style.fontSize = fontS + "vh";
 				span[e].innerHTML = Puncs[i];
-				span[e].id = "enabled";
-				winWidth = window.innerWidth - span[e].offsetWidth-(window.innerWidth*winscale);
-				winHeight = window.innerHeight - span[e].offsetHeight-(window.innerHeight*winscale);
-				randomTop = getRandomNumber((window.innerHeight*winscale), winHeight);
-				randomLeft = getRandomNumber((window.innerWidth*winscale), winWidth);
-				span[e].style.top = randomTop + "px";
-				span[e].style.left = randomLeft + "px";
-				
-				/*setInterval(function(){ //minimize font size over time
-					fontS = clampNumber(fontS - 1, 36, 96);
+				winWidth = playarea.offsetWidth - span[e].offsetWidth;
+				winHeight = playarea.offsetHeight - span[e].offsetHeight;
+				randomTop = getRandomNumber(0, winHeight);
+				randomLeft = getRandomNumber(0, winWidth);
+				setTimeout(function(){
+					span[e].id = "enabled";
+					span[e].style.top = randomTop + "px";
+					span[e].style.left = randomLeft + "px";
 					
-					span[e].style.fontSize = fontS + "px";
 					
-				},100);*/
+				},1000);
 			}
 
 			function getRandomNumber(min, max) {
 				return Math.floor(Math.random() * (max - min)+min);
 			}
 			
-			async function UpdateScoreBoard(button){ //SCOREBOARD
+			async function UpdateScoreBoard(button){ //punctuation clicked - update SCOREBOARD - spawn new punctuation
 				if(timer<-1){
 					return;
 				}
+				span[button].id = "disabled";
 				//console.log("reset commas");
 				switch (span[button].innerHTML){
 					case ".": //period
@@ -205,7 +201,7 @@
 				}
 				if(score>ScoreBar){
 						timer=timer+TimeBonus;
-						ScoreBar=ScoreBar+1000;
+						ScoreBar = ScoreBar+1000;
 						
 						if (commaTime[0] >timer && commaTime[1] >timer){
 							commaTime = getCommaTime(5, 2);
@@ -214,38 +210,38 @@
 						
 					}
 				span[button].innerHTML = " ";
-				span[button].id = "disabled";
-				document.getElementById("score").innerHTML = score;
-				setTimeout(function(){Movebutton(button);}, 1000);
+				
+				document.getElementById("score").innerHTML = "Score: ".bold() + score;
+				Movebutton(button);
 			}
 			
 			function Endgame(){  //END GAME
 				alert("Game Over! Your score is: "+score +"\n Refresh page to play again!");
-				//clearInterval();
+				
 			}
-			function startTimer(display) {
+			function startTimer(display) {  //TIMER
 				
 				var mytimer = setInterval(function () {
-					console.log(commaTime+" - "+timer);
+					//console.log(commaTime+" - "+timer);
 					minutes = parseInt(timer / 60, 10);
 					seconds = parseInt(timer % 60, 10);
 					
 					minutes = minutes < 10 ? "0" + minutes : minutes;
 					seconds = seconds < 10 ? "0" + seconds : seconds;
 
-					display.textContent = minutes + ":" + seconds;
+					display.innerHTML = "Time Left: ".bold() + minutes + ":" + seconds;
 					if (timer == commaTime[0] || timer == commaTime[1]){
 						spawnComma();
 					}
 					if (--timer < -1) {
 						Endgame();
 						clearInterval(mytimer);
-						display.textContent = "00:00";
+						display.innerHTML = "<b>Time Left: </b> 00:00";
 					}
 				}, 1000);
 			}
 			function spawnComma(){  //COMMA MULTIPLYER
-				//var i = getRandomNumber(0,100);
+				
 				comma = document.createElement("span")
 				document.body.appendChild(comma);
 				comma.classList.add("button");
@@ -278,9 +274,14 @@
 					},5000);
 				});
 			}
-			for(let butcount=0;butcount<maxPuncs;butcount++){ //create buttons
+			for(let butcount=0;butcount<maxPuncs;butcount++){ //create buttons, begin game
+				var winWidth;
+				var winHeight;
+				var randomTop;
+				var randomLeft;
 				span.push(document.createElement("span"));
-				document.body.appendChild(span[butcount]);
+				//document.div.appendChild(span[butcount]);
+				document.getElementById("playarea").appendChild(span[butcount]);
 				span[butcount].classList.add("button");
 				
 				var i = getRandomNumber(0,4);
@@ -301,10 +302,10 @@
 				
 				span[butcount].innerHTML = Puncs[i];
 				span[butcount].id = "enabled";
-				winWidth = window.innerWidth - span[butcount].offsetWidth-(window.innerWidth*winscale);
-				winHeight = window.innerHeight - span[butcount].offsetHeight-(window.innerHeight*winscale);
-				randomTop = getRandomNumber((window.innerHeight*winscale), winHeight);
-				randomLeft = getRandomNumber((window.innerWidth*winscale), winWidth);
+				winWidth = playarea.offsetWidth - span[butcount].offsetWidth;
+				winHeight = playarea.offsetHeight - span[butcount].offsetHeight;
+				randomTop = getRandomNumber(0, winHeight);
+				randomLeft = getRandomNumber(0, winWidth);
 				span[butcount].style.top = randomTop + "px";
 				span[butcount].style.left = randomLeft + "px";
 				

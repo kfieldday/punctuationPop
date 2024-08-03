@@ -79,7 +79,7 @@
 		</style>
 	</head>
 	<body>
-		<h3> Punctuation Pop! v1.4.3 alpha</h3>
+		<h3> Punctuation Pop! v1.4.4 alpha</h3>
 		<div id="playarea">
 			<p id="Timer"><b>Time Left: </b> Tap to start!</p>
 			<p id="score"><b>Score:</b> You can do it!</p>
@@ -93,7 +93,7 @@
 		</div>
 		<script type="application/javascript">
 			//CODED BY KENNY SCOFIELD
-			//VERSION: 1.4.3 - alpha
+			//VERSION: 1.4.4 - alpha
 			var timer = 30, minutes, seconds;
 			const Puncs = ['.', '?', '!','?!'];
 			var span=[];
@@ -104,7 +104,14 @@
 			var ScoreBar = 1000;
 			var TimeBonus = 2;
 			var commaTime = getCommaTime(0, 0);
+			var commaHit = 0;
 			var playarea = document.getElementById("playarea");
+			
+			document.body.addEventListener("click", function (){  //WAIT FOR CLICK TO START GAME
+				startTimer(document.getElementById("Timer"));
+				this.removeEventListener("click",arguments.callee,false);
+				StartGame();
+			}); //Start Timer
 			
 			function getCommaTime(offsetX, offsetY){
 				let a = getRandomNumber(timer-20-offsetX,timer-10+offsetX);
@@ -114,14 +121,6 @@
 				} 
 				return [a,b];
 			}
-			
-			
-			document.body.addEventListener("click", function (){  //WAIT FOR CLICK TO START GAME
-				startTimer(document.getElementById("Timer"));
-				this.removeEventListener("click",arguments.callee,false);
-				StartGame();
-			}); //Start Timer
-			
 			function clampNumber(num, a, b){ //clamp(n, min, max)
 				return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
 			} 
@@ -191,11 +190,6 @@
 				}
 				
 				
-					
-			
-
-			
-			
 			async function UpdateScoreBoard(button){ //punctuation clicked - update SCOREBOARD - spawn new punctuation
 				if(timer<-1){
 					return;
@@ -224,8 +218,9 @@
 						timer=timer+TimeBonus;
 						ScoreBar = ScoreBar+1000;
 						
-						if (commaTime[0] >timer && commaTime[1] >timer){
+						if ((commaTime[0] >timer && commaTime[1] >timer) || commaHit >2){
 							commaTime = getCommaTime(5, 2);
+							commaHit = 0;
 							//console.log("reset commas at "+score);
 						}
 						
@@ -236,11 +231,7 @@
 				Movebutton(button);
 			}
 			
-			function Endgame(){  //END GAME
-				alert("Game Over! Your score is: "+score +"\n Refresh page to play again!");
-				
-			}
-			function startTimer(display) {  //TIMER
+						function startTimer(display) {  //TIMER
 				
 				var mytimer = setInterval(function () {
 					//console.log(commaTime+" - "+timer);
@@ -280,6 +271,7 @@
 				comma.addEventListener("click", function(){
 					this.remove();
 					scaler = clampNumber(scaler*2,1,8);
+					commaHit = commaHit++;
 					var shadowdist = function(a){ return "0px 0px "+((a)**2)+ "px red";};
 					
 					for(let i=0;i<maxPuncs;i++){
@@ -293,6 +285,11 @@
 						}
 					},5000);
 				});
+			}
+			
+			function Endgame(){  //END GAME
+				alert("Game Over! Your score is: "+score +"\n Refresh page to play again!");
+				
 			}
 			function StartGame(){
 				for(let butcount=0;butcount<maxPuncs;butcount++){ //create buttons, begin game

@@ -270,7 +270,7 @@
 				comma.style.zIndex = 2;
 				comma.addEventListener("click", function(){
 					this.remove();
-					scaler = clampNumber(scaler*2,0,8);
+					scaler = clampNumber(scaler*2,1,8);
 					var shadowdist = function(a){ return "0px 0px "+((a)**2)+ "px red";};
 					
 					for(let i=0;i<maxPuncs;i++){
@@ -278,7 +278,7 @@
 					}
 					
 					setTimeout(function () {
-						scaler = clampNumber(scaler/2,0,8);
+						scaler = clampNumber(scaler/2,1,8);
 						for(let i=0;i<maxPuncs;i++){
 							span[i].style.textShadow = shadowdist(scaler);
 						}

@@ -5,17 +5,21 @@
 		-ms-user-select: none; /* IE 10 and IE 11 */
 		user-select: none; /* Standard syntax */
 	}
+	h3 {
+		text-align:center;
+	}
 	.button {
-		
 		background-color: transparent; 
 		border-radius: 50em;
 		vertical-align:middle;
 		position:absolute;
 		font-size: 24vh;
 		line-height: 15vh;
+		
 	}
 	.button:hover{
 		cursor: pointer;
+		/*background-color:rgba(255, 0, 0, 0.3);*/
 	}
 	.period{
 		color: black;
@@ -36,6 +40,11 @@
 		color: red;
 		z-index: 4;
 		padding: 0px;
+	}
+	.clicked{
+		z-index:0;
+		padding: 0px;
+		font-size: 20vh;
 	}
 	#enabled {
 		transition-duration: 0.4s;
@@ -61,14 +70,85 @@
 		position: relative;
 		
 	}
-	#playarea p {
+	.started {
+		transition-duration: 0.4s;
+	}
+	#Timer.started, #score.started{ /*timer and score start*/
+			left:1%;
+		}
+	#key.started{
+		top: 10px;
+		right: 1%;
+	}
+	#Timer, #score { /*timer and score*/
 		
-		padding: 0px 0px 0px 10px;
+		display:block;
+		padding: 0px 0px 0px 5px;
+		position: relative;
 	}
 	#key {
 		display:inline-block;
-		top: 10px;
-		right: 1%;
+		top: 70px;
 		position: absolute;
 		font-size: 20px;
+		text-align: center;
+	}
+	
+	
+	
+	
+	@media (min-width:320px)  { /* smartphones, iPhone, portrait 480x320 phones */ 
+		.button {
+			font-size: 15vh;
+		}
+		#Timer, #score { /*timer and score*/
+			left:0%;
+		}
+		#key {
+			top: 70px;
+			right: 35%;
+		}
+		
+	}
+	@media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ 
+	#Timer, #score { /*timer and score*/
+			left:16%;
+			
+		}
+		#key {
+			
+			top: 70px;
+			right: 40%;
+			
+		}
+		
+	}
+	@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
+	
+		
+		#Timer, #score { /*timer and score*/
+			left:30%;
+			
+		}
+		#key {
+			
+			top: 70px;
+			right: 43%;
+			
+		}
+		
+	}
+	@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
+	@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
+	@media (min-width:1281px) { /* hi-res laptops and desktops */ 
+		#Timer, #score { /*timer and score*/
+			left:40%;
+			
+		}
+		#key {
+			top: 70px;
+			right: 48%;
+			
+		}
+	
 	}

@@ -136,11 +136,11 @@
 						if (timer>-1){
 							randomTop = clampNumber(parseInt(elem[e].style.top) + getRandomNumber(-30, 30),0 , playarea.offsetHeight - elem[e].offsetHeight);
 							randomLeft = clampNumber(parseInt(elem[e].style.left) + getRandomNumber(-30, 30), 0 ,playarea.offsetWidth - elem[e].offsetWidth);
-							if(!isMobile() && ((posY > rectY - borderDist  && rectY + borderDist > posY) && (posX > rectX - borderDist && rectX +borderDist > posX))){
+							/*if(!isMobile() && ((posY > rectY - borderDist  && rectY + borderDist > posY) && (posX > rectX - borderDist && rectX +borderDist > posX))){
 								randomTop = parseInt(randomTop) + ((posY - rectY)/2.5);
 								randomLeft = parseInt(randomLeft) + ((posX - rectX)/2.5);
 								//console.log(posY - rectY);
-							}  
+							}  */
  							elem[e].style.top = randomTop + "px";
 							elem[e].style.left = randomLeft + "px";
 						}

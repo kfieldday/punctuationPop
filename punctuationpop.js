@@ -1,5 +1,5 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.5.1 - alpha
+			//VERSION: 1.5.2 - alpha
 			const Puncs = ['.', '?', '!','?!'];
 			const TimeBonus = 2;
 			const playarea = document.getElementById("playarea");
@@ -10,7 +10,7 @@
 			var elem=[];
 			var score = 0;
 			var scaler = 1;
-			var maxPuncs = 15;
+			var maxPuncs = getPunctuationAmount();
 			var ScoreBar = 1000;
 			var commaTime = getCommaTime(0, 0);
 			var commaHit = 0;
@@ -18,8 +18,17 @@
 			var posY;
 			
 			
-			
-			
+			function getPunctuationAmount(){
+				if(isMobile()){
+					return 15;
+				}
+				else{
+					return 45;
+				}
+			};
+			function isMobile() {
+				return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+			}
 			function getRandomNumber(min, max) {  //RANDOM NUM
 				
 				if(TodayRandom.length==0){
@@ -70,9 +79,7 @@
 				posY = event.pageY;
 				
 			}
-			function isMobile() {
-				return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-			}
+			
 			
 			async function Movebutton(e){ //UPDATE BUTTON LOCATION
 				var winWidth;
@@ -234,7 +241,7 @@
 				comma.style.zIndex = 2;
 				comma.addEventListener("click", function(){
 					this.remove();
-					scaler = clampNumber(scaler*2,1,8);
+					scaler = clampNumber(scaler*2,1,4);
 					commaHit = commaHit++;
 					var shadowdist = function(a){ return "0px 0px "+((a)**2)+ "px red";};
 					
@@ -243,7 +250,7 @@
 					}
 					
 					setTimeout(function () {
-						scaler = clampNumber(scaler/2,1,8);
+						scaler = clampNumber(scaler/2,1,4);
 						for(let i=0;i<maxPuncs;i++){
 							elem[i].style.textShadow = shadowdist(scaler);
 						}

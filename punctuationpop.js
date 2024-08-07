@@ -1,5 +1,5 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.5.0 - alpha
+			//VERSION: 1.5.1 - alpha
 			const Puncs = ['.', '?', '!','?!'];
 			const TimeBonus = 2;
 			const playarea = document.getElementById("playarea");
@@ -70,6 +70,9 @@
 				posY = event.pageY;
 				
 			}
+			function isMobile() {
+				return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+			}
 			
 			async function Movebutton(e){ //UPDATE BUTTON LOCATION
 				var winWidth;
@@ -126,7 +129,7 @@
 						if (timer>-1){
 							randomTop = clampNumber(parseInt(elem[e].style.top) + getRandomNumber(-30, 30),0 , playarea.offsetHeight - elem[e].offsetHeight);
 							randomLeft = clampNumber(parseInt(elem[e].style.left) + getRandomNumber(-30, 30), 0 ,playarea.offsetWidth - elem[e].offsetWidth);
-							if((posY > rectY - borderDist  && rectY + borderDist > posY) && (posX > rectX - borderDist && rectX +borderDist > posX)){
+							if(!isMobile() && ((posY > rectY - borderDist  && rectY + borderDist > posY) && (posX > rectX - borderDist && rectX +borderDist > posX))){
 								randomTop = parseInt(randomTop) + ((posY - rectY)/2.5);
 								randomLeft = parseInt(randomLeft) + ((posX - rectX)/2.5);
 								//console.log(posY - rectY);

@@ -156,7 +156,7 @@
 				if(timer<-1){
 					return;
 				}
-				navigator.vibrate(1);
+				window?.navigator?.vibrate?.(1);
 				
 				clearInterval(elem[button].movementClock);
 				switch (elem[button].innerHTML){

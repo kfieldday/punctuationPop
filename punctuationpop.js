@@ -161,7 +161,7 @@
 				var randomLeft;
 				var fontS;
 				var movementClock;
-				
+				var ctx = elem[e].getContext('2d');
 				
 				//console.log(e);
 				var i = getRandomNumber(0,100); //weighted random
@@ -337,38 +337,51 @@
 			}
 			function StartGame(){
 				
-				for(let butcount=0;butcount<maxPuncs;butcount++){ //create buttons, begin game
+				for(let butcount=0;butcount<maxPuncs;butcount++){ //load punctuations, begin game
 					var winWidth;
 					var winHeight;
 					var randomTop;
 					var randomLeft;
 					elem.push(document.createElement('canvas'));
-					document.getElementById("playarea").appendChild(elem[butcount]);
+					elem[butcount].width = SPRITE_SIZE;  // Set canvas width and height
+					elem[butcount].height = SPRITE_SIZE;
+					var ctx = elem[butcount].getContext('2d');
+					
+					
 					elem[butcount].classList.add("button");
 					console.log(elem);
 					var i = getRandomNumber(0,4);
 					switch (i){
 						case 0:
 							//elem[butcount].classList.add("period");
-							elem[butcount].getContext('2d').drawImage(IPeriod,0,0,SPRITE_SIZE,96,0,0,SPRITE_SIZE,96);
+							IPeriod.onload = function() {
+								ctx.drawImage(IPeriod,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
+							}
 							break;
 						case 1:
 							//elem[butcount].classList.add("question");
-							elem[butcount].getContext('2d').drawImage(IQuestion,0,0,SPRITE_SIZE,96,0,0,SPRITE_SIZE,96);
+							IQuestion.onload = function() {
+								ctx.drawImage(IQuestion,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
+							}
 							break;
 						case 2:
 							//elem[butcount].classList.add("exclamation");
-							elem[butcount].getContext('2d').drawImage(IExclaim,0,0,SPRITE_SIZE,96,0,0,SPRITE_SIZE,96);
+							IExclaim.onload = function() {
+								ctx.drawImage(IExclaim,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
+							}
 							break;
 						case 3:
 							//elem[butcount].classList.add("interro");
-							elem[butcount].getContext('2d').drawImage(IInterro,0,0,SPRITE_SIZE,96,0,0,SPRITE_SIZE,96);
+							IInterro.onload = function() {
+								ctx.drawImage(IInterro,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
+							}
 							break;
 					}
+					document.getElementById("playarea").appendChild(elem[butcount]);
 					//elem[butcount].innerHTML = Puncs[i];
 					elem[butcount].id = "enabled";
-					winWidth = playarea.offsetWidth - elem[butcount].offsetWidth;
-					winHeight = playarea.offsetHeight - elem[butcount].offsetHeight;
+					winWidth = playarea.offsetWidth -  SPRITE_SIZE;
+					winHeight = playarea.offsetHeight -  SPRITE_SIZE;
 					randomTop = getRandomNumber(0, winHeight);
 					randomLeft = getRandomNumber(0, winWidth);
 					elem[butcount].style.top = randomTop + "px";
@@ -376,9 +389,5 @@
 					
 					
 				}
-				/*elem.forEach((item, index) => {
-					
-					item.addEventListener("click", function(){UpdateScoreBoard(index);});
-					
-				});*/
+				
 			}

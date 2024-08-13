@@ -1,6 +1,24 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.5.2 - alpha
+			//VERSION: 1.0.1 - BETA
 			const Puncs = ['.', '?', '!','?!'];
+			
+			var IComma = new Image();
+			IComma.src =  './COMMA_SPRITE_SHEET_REVISED.png';
+			IComma.crossOrigin = "anonymous";
+			var IPeriod = new Image();
+			IPeriod.src =  './PERIOD_SPRITE_SHEET.png';
+			IPeriod.crossOrigin = "anonymous";
+			var IQuestion = new Image();
+			IQuestion.src =  './QUEST_SPRITE_SHEET.png';
+			IQuestion.crossOrigin = "anonymous";
+			var IExclaim = new Image();
+			IExclaim.src =  './EXCLAIM_SPRITE_SHEET.png';
+			IExclaim.crossOrigin = "anonymous";
+			var IInterro = new Image();
+			IInterro.src =  './INTERRO_SPRITE_SHEET.png';
+			IInterro.crossOrigin = "anonymous";
+			
+			
 			const TimeBonus = 2;
 			const playarea = document.getElementById("playarea");
 			playarea.addEventListener("mousemove", updatePos, false);
@@ -16,8 +34,43 @@
 			var commaHit = 0;
 			var posX;
 			var posY;
+			const SPRITE_SIZE = 96;
+			let firstClickTime = null;
+        	let clickSpeed = null;
+			var canvas = document.createElement('canvas');
+			canvas.width = SPRITE_SIZE;  // Set canvas width and height
+			canvas.height = SPRITE_SIZE;
+			var ctx = canvas.getContext('2d');
+			IComma.onload = function() {
+				ctx.drawImage(IComma, 0, 0, SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
+				playarea.appendChild(canvas);
+				console.log("loaded comma");
+			};
+			IComma.onerror = function() {
+				console.error("Failed to load image.");
+			};
+			function spritePositionToImagePosition(col) {
+				return {
+					x: (col * (SPRITE_SIZE))
+				};
+			}
+			
+			function AnimatePop(PuncImage, i) {
+				var col = 0;
+				const Interval =setInterval(() => {
+					if (col === 3) {
+						clearInterval(Interval);
+						return;
+					}
+					var position = spritePositionToImagePosition(col);
+					elem[i].getContext('2d').clearRect(0,0,elem[i].width,elem[i].height);
+					elem[i].getContext('2d').drawImage(PuncImage,position.x,0,SPRITE_SIZE,SPRITE_SIZE,0,0,SPRITE_SIZE,SPRITE_SIZE);
+					col += 1;
+				}, 300);
+			}
 			
 			
+
 			function getPunctuationAmount(){
 				if(isMobile()){
 					return 15;
@@ -64,7 +117,6 @@
 				return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
 			} 
 			
-			
 			function Norm(){
 				const min = parseInt((11).toString() );
 				const max = parseInt((1231).toString() );
@@ -79,7 +131,28 @@
 				posY = event.pageY;
 				
 			}
-			
+			document.body.addEventListener("click", function(event){  //handles clicking of punctuations
+				if (firstClickTime === null) {
+					// First click
+					firstClickTime = Date.now();
+				} else {
+					// Second click
+					const secondClickTime = Date.now();
+					clickSpeed = (secondClickTime - firstClickTime)/1000;
+					firstClickTime = null; // Reset for next click sequence
+				}
+				if(clickSpeed>18){
+					console.log("clicked too fast" + clickSpeed);
+					return;
+				}
+				const clickedElement =event.target;
+				const index = elem.indexOf(clickedElement);
+					if(index !== -1){
+						
+						AnimatePop(elem[index].getContext('2d').getImageData(0,0,96,96), index);
+						UpdateScoreBoard(index);
+					}
+			});
 			
 			async function Movebutton(e){ //UPDATE BUTTON LOCATION
 				var winWidth;
@@ -224,7 +297,7 @@
 			}
 			function spawnComma(){  //COMMA MULTIPLYER
 				console.log("comma spawned");
-				comma = document.createElement("span")
+				var comma = document.createElement("span")
 				//document.body.appendChild(comma);
 				document.getElementById("playarea").appendChild(comma);
 				comma.classList.add("button");
@@ -263,33 +336,36 @@
 				
 			}
 			function StartGame(){
+				
 				for(let butcount=0;butcount<maxPuncs;butcount++){ //create buttons, begin game
 					var winWidth;
 					var winHeight;
 					var randomTop;
 					var randomLeft;
-					elem.push(document.createElement("span"));
-					//document.div.appendChild(elem[butcount]);
+					elem.push(document.createElement('canvas'));
 					document.getElementById("playarea").appendChild(elem[butcount]);
 					elem[butcount].classList.add("button");
-					
+					console.log(elem);
 					var i = getRandomNumber(0,4);
 					switch (i){
 						case 0:
-							elem[butcount].classList.add("period");
+							//elem[butcount].classList.add("period");
+							elem[butcount].getContext('2d').drawImage(IPeriod,0,0,SPRITE_SIZE,96,0,0,SPRITE_SIZE,96);
 							break;
 						case 1:
-							elem[butcount].classList.add("question");
+							//elem[butcount].classList.add("question");
+							elem[butcount].getContext('2d').drawImage(IQuestion,0,0,SPRITE_SIZE,96,0,0,SPRITE_SIZE,96);
 							break;
 						case 2:
-							elem[butcount].classList.add("exclamation");
+							//elem[butcount].classList.add("exclamation");
+							elem[butcount].getContext('2d').drawImage(IExclaim,0,0,SPRITE_SIZE,96,0,0,SPRITE_SIZE,96);
 							break;
 						case 3:
-							elem[butcount].classList.add("interro");
+							//elem[butcount].classList.add("interro");
+							elem[butcount].getContext('2d').drawImage(IInterro,0,0,SPRITE_SIZE,96,0,0,SPRITE_SIZE,96);
 							break;
 					}
-					
-					elem[butcount].innerHTML = Puncs[i];
+					//elem[butcount].innerHTML = Puncs[i];
 					elem[butcount].id = "enabled";
 					winWidth = playarea.offsetWidth - elem[butcount].offsetWidth;
 					winHeight = playarea.offsetHeight - elem[butcount].offsetHeight;
@@ -300,9 +376,9 @@
 					
 					
 				}
-				elem.forEach((item, index) => {
+				/*elem.forEach((item, index) => {
 					
 					item.addEventListener("click", function(){UpdateScoreBoard(index);});
 					
-				});
+				});*/
 			}

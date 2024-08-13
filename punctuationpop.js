@@ -352,7 +352,6 @@
 					var ctx = elem[butcount].getContext('2d');
 					
 					
-					elem[butcount].classList.add("button");
 					
 					var i = getRandomNumber(0,4);
 					switch (i){
@@ -394,6 +393,8 @@
 							break;
 					}
 					document.getElementById("playarea").appendChild(elem[butcount]);
+					
+					elem[butcount].classList.add("button");
 					//elem[butcount].innerHTML = Puncs[i];
 					elem[butcount].id = "enabled";
 					winWidth = playarea.offsetWidth -  SPRITE_SIZE;

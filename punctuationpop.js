@@ -1,5 +1,5 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.0.4 - BETA
+			//VERSION: 1.0.5 - BETA
 			const Puncs = ['.', '?', '!','?!'];
 			
 			const images = {
@@ -9,10 +9,10 @@
 				interro: new Image()
 			};
 			
-			images.period.src = './PERIOD_IMAGE.png';
-			images.question.src = './QUESTION_IMAGE.png';
-			images.exclaim.src = './EXCLAIM_IMAGE.png';
-			images.interro.src = './INTERRO_IMAGE.png';
+			images.period.src = './PERIOD_SPRITE_SHEET.png';
+			images.question.src = './QUEST_SPRITE_SHEET.png';
+			images.exclaim.src = './EXCLAIM_SPRITE_SHEET.png';
+			images.interro.src = './INTERRO_SPRITE_SHEET.png';
 			
 			const imagePromises = Object.values(images).map(img => new Promise((resolve, reject) => {
 				img.onload = () => resolve(img);
@@ -51,7 +51,7 @@
 			const SPRITE_SIZE = 96;
 			let firstClickTime = null;
         	let clickSpeed = null;
-			var canvas = document.createElement('canvas');
+			/*var canvas = document.createElement('canvas');
 			canvas.width = SPRITE_SIZE;  // Set canvas width and height
 			canvas.height = SPRITE_SIZE;
 			var ctx = canvas.getContext('2d');
@@ -62,7 +62,7 @@
 			};
 			IComma.onerror = function() {
 				console.error("Failed to load image.");
-			};
+			};*/
 			function spritePositionToImagePosition(col) {
 				return {
 					x: (col * (SPRITE_SIZE))

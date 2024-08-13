@@ -349,7 +349,7 @@
 					
 					
 					elem[butcount].classList.add("button");
-					console.log(elem);
+					
 					var i = getRandomNumber(0,4);
 					switch (i){
 						case 0:

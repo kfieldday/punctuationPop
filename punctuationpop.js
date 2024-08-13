@@ -1,5 +1,5 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.1.0 - BETA
+			//VERSION: 1.1.1 - BETA
 			const Puncs = ['.', '?', '!','?!'];
 			
 			const PImages = {
@@ -53,18 +53,7 @@
 			const SPRITE_SIZE = 96;
 			let firstClickTime = null;
         	let clickSpeed = null;
-			/*var canvas = document.createElement('canvas');
-			canvas.width = SPRITE_SIZE;  // Set canvas width and height
-			canvas.height = SPRITE_SIZE;
-			var ctx = canvas.getContext('2d');
-			IComma.onload = function() {
-				ctx.drawImage(IComma, 0, 0, SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
-				playarea.appendChild(canvas);
-				console.log("loaded comma");
-			};
-			IComma.onerror = function() {
-				console.error("Failed to load image.");
-			};*/
+			
 			function spritePositionToImagePosition(col) {
 				return {
 					x: (col * (SPRITE_SIZE))
@@ -72,6 +61,9 @@
 			}
 			
 			function AnimatePop(canvas) {
+				if(timer<-1){
+					return;
+				}
 				var col = 1;
 				const ctx = canvas.getContext('2d');
 				//console.log(canvas + " + " + canvas.classList);
@@ -227,7 +219,7 @@
 						break;
 				}
 				//elem[e].style.fontSize = fontS + "vh";
-				//elem[e].innerHTML = Puncs[i];
+				
 				
 				ctx.drawImage(selectedImage, 0, 0, SPRITE_SIZE, SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 				setTimeout(function(){
@@ -266,9 +258,7 @@
 				
 				
 			async function UpdateScoreBoard(punc){ //punctuation clicked - update SCOREBOARD - spawn new punctuation
-				if(timer<-1){
-					return;
-				}
+				
 				window?.navigator?.vibrate?.(1);
 				
 				clearInterval(punc.movementClock);
@@ -306,7 +296,6 @@
 						
 					}
 				punc.id = "clicked";
-				//elem[button].innerHTML = " ";
 				
 				document.getElementById("score").innerHTML = "Score: ".bold() + score;
 				

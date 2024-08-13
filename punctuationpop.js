@@ -2,26 +2,36 @@
 			//VERSION: 1.0.3 - BETA
 			const Puncs = ['.', '?', '!','?!'];
 			
-			var IComma = new Image();
-			IComma.crossOrigin = "anonymous";
-			IComma.src =  './COMMA_SPRITE_SHEET_REVISED.png';
-
-			var IPeriod = new Image();
-			IPeriod.crossOrigin = "anonymous";
-			IPeriod.src =  './PERIOD_SPRITE_SHEET.png';
-
-			var IQuestion = new Image();
-			IQuestion.crossOrigin = "anonymous";
-			IQuestion.src =  './QUEST_SPRITE_SHEET.png';
-
-			var IExclaim = new Image();
-			IExclaim.crossOrigin = "anonymous";
-			IExclaim.src =  './EXCLAIM_SPRITE_SHEET.png';
-
-			var IInterro = new Image();
-			IInterro.crossOrigin = "anonymous";
-			IInterro.src =  './INTERRO_SPRITE_SHEET.png';
-			console.log("test");
+			const images = {
+				period: new Image(),
+				question: new Image(),
+				exclaim: new Image(),
+				interro: new Image()
+			};
+			
+			images.period.src = './PERIOD_IMAGE.png';
+			images.question.src = './QUESTION_IMAGE.png';
+			images.exclaim.src = './EXCLAIM_IMAGE.png';
+			images.interro.src = './INTERRO_IMAGE.png';
+			
+			const imagePromises = Object.values(images).map(img => new Promise((resolve, reject) => {
+				img.onload = () => resolve(img);
+				img.onerror = () => reject(new Error(`Failed to load image: ${img.src}`));
+			}));
+			
+			Promise.all(imagePromises).then(() => {
+				// All images are loaded, now you can proceed with your canvas setup
+				document.body.addEventListener("click", function (){  //WAIT FOR CLICK TO START GAME
+					startTimer(document.getElementById("Timer"));
+					this.removeEventListener("click",arguments.callee,false);
+					document.getElementById("Timer").classList.add("started");
+					document.getElementById("score").classList.add("started");
+					document.getElementById("key").classList.add("started");
+					StartGame();
+				}); //Start Timer
+			}).catch(error => {
+				console.error(error);
+			});
 			
 			const TimeBonus = 2;
 			const playarea = document.getElementById("playarea");
@@ -99,14 +109,7 @@
 				//console.log(RandOffset);
 				return Math.floor(TodayRandom[RandOffset % TodayRandom.length] * (max - min)+min);
 			}
-			document.body.addEventListener("click", function (){  //WAIT FOR CLICK TO START GAME
-				startTimer(document.getElementById("Timer"));
-				this.removeEventListener("click",arguments.callee,false);
-				document.getElementById("Timer").classList.add("started");
-				document.getElementById("score").classList.add("started");
-				document.getElementById("key").classList.add("started");
-				StartGame();
-			}); //Start Timer
+			
 			
 			function getCommaTime(offsetX, offsetY){
 				let a = getRandomNumber(timer-20-offsetX,timer-10+offsetX);
@@ -341,70 +344,45 @@
 			}
 			function StartGame(){
 				
-				for(let butcount=0;butcount<maxPuncs;butcount++){ //load punctuations, begin game
-					var winWidth;
-					var winHeight;
-					var randomTop;
-					var randomLeft;
-					elem.push(document.createElement('canvas'));
-					elem[butcount].width = SPRITE_SIZE;  // Set canvas width and height
-					elem[butcount].height = SPRITE_SIZE;
-					var ctx = elem[butcount].getContext('2d');
-					
-					
-					
-					var i = getRandomNumber(0,4);
-					switch (i){
-						case 0:
-							//elem[butcount].classList.add("period");
-							IPeriod.onload = function() {
-								ctx.drawImage(IPeriod,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
-							}
-							IPeriod.onerror = function() {
-								console.error("Failed to load image.");
-							};
-							break;
-						case 1:
-							//elem[butcount].classList.add("question");
-							IQuestion.onload = function() {
-								ctx.drawImage(IQuestion,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
-							}
-							IQuestion.onerror = function() {
-								console.error("Failed to load image.");
-							};
-							break;
-						case 2:
-							//elem[butcount].classList.add("exclamation");
-							IExclaim.onload = function() {
-								ctx.drawImage(IExclaim,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
-							}
-							IExclaim.onerror = function() {
-								console.error("Failed to load image.");
-							};
-							break;
-						case 3:
-							//elem[butcount].classList.add("interro");
-							IInterro.onerror = function() {
-								console.error("Failed to load image.");
-							};
-							IInterro.onload = function() {
-								ctx.drawImage(IInterro,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
-							}
-							break;
+				
+					for(let butcount = 0; butcount < maxPuncs; butcount++) {
+						let elem = document.createElement('canvas');
+						elem.width = SPRITE_SIZE;
+						elem.height = SPRITE_SIZE;
+						let ctx = elem.getContext('2d');
+				
+						let i = getRandomNumber(0, 4);
+						let selectedImage;
+				
+						switch (i) {
+							case 0:
+								selectedImage = images.period;
+								break;
+							case 1:
+								selectedImage = images.question;
+								break;
+							case 2:
+								selectedImage = images.exclaim;
+								break;
+							case 3:
+								selectedImage = images.interro;
+								break;
+						}
+				
+						ctx.drawImage(selectedImage, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
+				
+						document.getElementById("playarea").appendChild(elem);
+				
+						elem.classList.add("button");
+						elem.id = "enabled";
+				
+						let winWidth = playarea.offsetWidth - SPRITE_SIZE;
+						let winHeight = playarea.offsetHeight - SPRITE_SIZE;
+						let randomTop = getRandomNumber(0, winHeight);
+						let randomLeft = getRandomNumber(0, winWidth);
+				
+						elem.style.top = randomTop + "px";
+						elem.style.left = randomLeft + "px";
 					}
-					document.getElementById("playarea").appendChild(elem[butcount]);
-					
-					elem[butcount].classList.add("button");
-					//elem[butcount].innerHTML = Puncs[i];
-					elem[butcount].id = "enabled";
-					winWidth = playarea.offsetWidth -  SPRITE_SIZE;
-					winHeight = playarea.offsetHeight -  SPRITE_SIZE;
-					randomTop = getRandomNumber(0, winHeight);
-					randomLeft = getRandomNumber(0, winWidth);
-					elem[butcount].style.top = randomTop + "px";
-					elem[butcount].style.left = randomLeft + "px";
-					
-					
-				}
 				
 			}

@@ -1,5 +1,5 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.0.5 - BETA
+			//VERSION: 1.0.6 - BETA
 			const Puncs = ['.', '?', '!','?!'];
 			
 			const images = {
@@ -369,7 +369,7 @@
 								break;
 						}
 				
-						ctx.drawImage(selectedImage, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
+						ctx.drawImage(selectedImage, 0, 0, SPRITE_SIZE, SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 				
 						document.getElementById("playarea").appendChild(elem);
 				

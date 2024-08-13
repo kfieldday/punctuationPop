@@ -10,11 +10,7 @@
 	}
 	.button {
 		background-color: transparent; 
-		border-radius: 50em;
-		vertical-align:middle;
 		position:absolute;
-		font-size: 24vh;
-		line-height: 15vh;
 		
 	}
 	.button:hover{
@@ -23,28 +19,23 @@
 	}
 	.period{
 		color: black;
-		padding: 0px 3vw 6vh 3vw;
 		z-index: 1;
 	}
 	.question{
 		color: green;
 		z-index: 2;
-		padding: 0px 2vw;
 	}
 	.exclamation{
 		color: blue;
 		z-index: 3;
-		padding: 0px 2vw;
 	}
 	.interro {
 		color: red;
 		z-index: 4;
-		padding: 0px;
 	}
 	.clicked{
 		z-index:0;
 		padding: 0px;
-		font-size: 20vh;
 	}
 	#enabled {
 		transition-duration: 0.4s;

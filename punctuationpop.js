@@ -1,5 +1,5 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.0.3 - BETA
+			//VERSION: 1.0.4 - BETA
 			const Puncs = ['.', '?', '!','?!'];
 			
 			const images = {

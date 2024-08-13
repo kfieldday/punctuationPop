@@ -3,20 +3,24 @@
 			const Puncs = ['.', '?', '!','?!'];
 			
 			var IComma = new Image();
-			IComma.src =  './COMMA_SPRITE_SHEET_REVISED.png';
 			IComma.crossOrigin = "anonymous";
+			IComma.src =  './COMMA_SPRITE_SHEET_REVISED.png';
+
 			var IPeriod = new Image();
-			IPeriod.src =  './PERIOD_SPRITE_SHEET.png';
 			IPeriod.crossOrigin = "anonymous";
+			IPeriod.src =  './PERIOD_SPRITE_SHEET.png';
+
 			var IQuestion = new Image();
-			IQuestion.src =  './QUEST_SPRITE_SHEET.png';
 			IQuestion.crossOrigin = "anonymous";
+			IQuestion.src =  './QUEST_SPRITE_SHEET.png';
+
 			var IExclaim = new Image();
-			IExclaim.src =  './EXCLAIM_SPRITE_SHEET.png';
 			IExclaim.crossOrigin = "anonymous";
+			IExclaim.src =  './EXCLAIM_SPRITE_SHEET.png';
+
 			var IInterro = new Image();
-			IInterro.src =  './INTERRO_SPRITE_SHEET.png';
 			IInterro.crossOrigin = "anonymous";
+			IInterro.src =  './INTERRO_SPRITE_SHEET.png';
 			console.log("test");
 			
 			const TimeBonus = 2;

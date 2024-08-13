@@ -1,5 +1,5 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.0.1 - BETA
+			//VERSION: 1.0.3 - BETA
 			const Puncs = ['.', '?', '!','?!'];
 			
 			var IComma = new Image();

@@ -357,21 +357,33 @@
 							IPeriod.onload = function() {
 								ctx.drawImage(IPeriod,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 							}
+							IPeriod.onerror = function() {
+								console.error("Failed to load image.");
+							};
 							break;
 						case 1:
 							//elem[butcount].classList.add("question");
 							IQuestion.onload = function() {
 								ctx.drawImage(IQuestion,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 							}
+							IQuestion.onerror = function() {
+								console.error("Failed to load image.");
+							};
 							break;
 						case 2:
 							//elem[butcount].classList.add("exclamation");
 							IExclaim.onload = function() {
 								ctx.drawImage(IExclaim,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 							}
+							IExclaim.onerror = function() {
+								console.error("Failed to load image.");
+							};
 							break;
 						case 3:
 							//elem[butcount].classList.add("interro");
+							IInterro.onerror = function() {
+								console.error("Failed to load image.");
+							};
 							IInterro.onload = function() {
 								ctx.drawImage(IInterro,0,0,SPRITE_SIZE,SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 							}

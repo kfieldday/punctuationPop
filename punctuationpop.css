@@ -33,13 +33,15 @@
 		color: red;
 		z-index: 4;
 	}
-	.clicked{
+	#clicked{
 		z-index:0;
 		padding: 0px;
+		pointer-events: none;
 	}
 	#enabled {
 		transition-duration: 0.4s;
 		visibility:visible;
+		pointer-events: auto;
 	}
 	#disabled{
 		
@@ -64,19 +66,15 @@
 	.started {
 		transition-duration: 0.4s;
 	}
-	#Timer.started, #score.started{ /*timer and score start*/
-			left:1%;
-		}
-	#key.started{
-		top: 10px;
-		right: 1%;
-	}
 	#Timer, #score { /*timer and score*/
 		
 		display:block;
 		padding: 0px 0px 0px 5px;
 		position: relative;
 	}
+	#Timer.started, #score.started{ /*timer and score start*/
+			left:1%;
+		}
 	#key {
 		display:inline-block;
 		top: 70px;
@@ -84,6 +82,12 @@
 		font-size: 20px;
 		text-align: center;
 	}
+	#key.started{
+		top: 10px;
+		right: 1%;
+	}
+	
+	
 	
 	
 	

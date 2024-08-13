@@ -1,20 +1,22 @@
 //CODED BY KENNY SCOFIELD
-			//VERSION: 1.0.6 - BETA
+			//VERSION: 1.1.0 - BETA
 			const Puncs = ['.', '?', '!','?!'];
 			
-			const images = {
+			const PImages = {
 				period: new Image(),
 				question: new Image(),
 				exclaim: new Image(),
-				interro: new Image()
+				interro: new Image(),
+				comma: new Image()
 			};
 			
-			images.period.src = './PERIOD_SPRITE_SHEET.png';
-			images.question.src = './QUEST_SPRITE_SHEET.png';
-			images.exclaim.src = './EXCLAIM_SPRITE_SHEET.png';
-			images.interro.src = './INTERRO_SPRITE_SHEET.png';
+			PImages.period.src = './PERIOD_SPRITE_SHEET.png';
+			PImages.question.src = './QUEST_SPRITE_SHEET.png';
+			PImages.exclaim.src = './EXCLAIM_SPRITE_SHEET.png';
+			PImages.interro.src = './INTERRO_SPRITE_SHEET.png';
+			PImages.comma.src = './COMMA_SPRITE_SHEET_REVISED.png';
 			
-			const imagePromises = Object.values(images).map(img => new Promise((resolve, reject) => {
+			const imagePromises = Object.values(PImages).map(img => new Promise((resolve, reject) => {
 				img.onload = () => resolve(img);
 				img.onerror = () => reject(new Error(`Failed to load image: ${img.src}`));
 			}));
@@ -69,18 +71,52 @@
 				};
 			}
 			
-			function AnimatePop(PuncImage, i) {
-				var col = 0;
+			function AnimatePop(canvas) {
+				var col = 1;
+				const ctx = canvas.getContext('2d');
+				//console.log(canvas + " + " + canvas.classList);
+				let imageKey = null;
+				switch (true){
+					case (canvas.classList.contains("period")): 
+						imageKey = PImages.period;
+					break;
+					case (canvas.classList.contains("question")): 
+						imageKey = PImages.question;
+					break;
+					case (canvas.classList.contains("exclamation")): 
+						imageKey = PImages.exclaim;
+					break;
+					case (canvas.classList.contains("interro")): 
+						imageKey = PImages.interro;
+					break;
+					case (canvas.classList.contains("comma")): 
+						imageKey = PImages.comma;
+					break;
+				}
+				if (!imageKey) {
+					console.error('No image found for the specified class.');
+					return;
+				}
+				UpdateScoreBoard(canvas);
 				const Interval =setInterval(() => {
 					if (col === 3) {
-						clearInterval(Interval);
+						ctx.clearRect(0,0,canvas.width,canvas.height);
+						
+						if(canvas.classList.contains("comma")){
+							canvas.remove;
+						} else {
+							canvas.id = "disabled";
+							clearInterval(Interval);
+							Movebutton(elem.indexOf(canvas));
+						}
 						return;
 					}
 					var position = spritePositionToImagePosition(col);
-					elem[i].getContext('2d').clearRect(0,0,elem[i].width,elem[i].height);
-					elem[i].getContext('2d').drawImage(PuncImage,position.x,0,SPRITE_SIZE,SPRITE_SIZE,0,0,SPRITE_SIZE,SPRITE_SIZE);
+					ctx.clearRect(0,0,canvas.width,canvas.height);
+					ctx.drawImage(imageKey,position.x,0,SPRITE_SIZE,SPRITE_SIZE,0,0,SPRITE_SIZE,SPRITE_SIZE);
+					
 					col += 1;
-				}, 300);
+				}, 100);
 			}
 			
 			
@@ -155,19 +191,15 @@
 				const clickedElement =event.target;
 				const index = elem.indexOf(clickedElement);
 					if(index !== -1){
+						//console.log(clickedElement);
+						AnimatePop(clickedElement) ;
 						
-						AnimatePop(elem[index].getContext('2d').getImageData(0,0,96,96), index);
-						UpdateScoreBoard(index);
 					}
 			});
 			
 			async function Movebutton(e){ //UPDATE BUTTON LOCATION
-				var winWidth;
-				var winHeight;
-				var randomTop;
-				var randomLeft;
-				var fontS;
-				var movementClock;
+				//var fontS;
+				let selectedImage;
 				var ctx = elem[e].getContext('2d');
 				
 				//console.log(e);
@@ -175,44 +207,45 @@
 				switch (true){
 					case (i<40): //period
 						elem[e].classList.add("period");
-						fontS = getRandomNumber(12,24);
-						i=0;
+						//fontS = getRandomNumber(12,24);
+						selectedImage = PImages.period;
 						break;
 					case (i<70): //question
 						elem[e].classList.add("question");
-						fontS = getRandomNumber(12,22);
-						i=1;
+						//fontS = getRandomNumber(12,22);
+						selectedImage = PImages.question;
 						break;
 					case (i<90): //exclamation
 						elem[e].classList.add("exclamation");
-						fontS = getRandomNumber(12,20);
-						i=2;
+						//fontS = getRandomNumber(12,20);
+						selectedImage = PImages.exclaim;
 						break;
 					case (i<100): //interrobang
 						elem[e].classList.add("interro");
-						fontS = getRandomNumber(12,18);
-						i=3;
+						//fontS = getRandomNumber(12,18);
+						selectedImage = PImages.interro;
 						break;
 				}
-				elem[e].style.fontSize = fontS + "vh";
-				elem[e].innerHTML = Puncs[i];
+				//elem[e].style.fontSize = fontS + "vh";
+				//elem[e].innerHTML = Puncs[i];
 				
+				ctx.drawImage(selectedImage, 0, 0, SPRITE_SIZE, SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 				setTimeout(function(){
 					elem[e].id = "enabled";
 					
-					winWidth = playarea.offsetWidth - elem[e].offsetWidth;
-					winHeight = playarea.offsetHeight - elem[e].offsetHeight;
-					randomTop = getRandomNumber(0, winHeight);
-					randomLeft = getRandomNumber(0, winWidth);
+					let winWidth = playarea.offsetWidth - elem[e].offsetWidth;
+					let winHeight = playarea.offsetHeight - elem[e].offsetHeight;
+					let randomTop = getRandomNumber(0, winHeight);
+					let randomLeft = getRandomNumber(0, winWidth);
 					elem[e].style.top = randomTop + "px";
 					elem[e].style.left = randomLeft + "px";
 					
 					
 				},1000);
-				movementClock = setInterval(function(){
-						let rectX = Math.floor(elem[e].getBoundingClientRect().left + ((elem[e].getBoundingClientRect().right - elem[e].getBoundingClientRect().left)/2));
-						let rectY = Math.floor(elem[e].getBoundingClientRect().top) + ((elem[e].getBoundingClientRect().bottom - elem[e].getBoundingClientRect().top)/2);
-						let borderDist = 200;
+				let movementClock = setInterval(function(){
+						//let rectX = Math.floor(elem[e].getBoundingClientRect().left + ((elem[e].getBoundingClientRect().right - elem[e].getBoundingClientRect().left)/2));
+						//let rectY = Math.floor(elem[e].getBoundingClientRect().top) + ((elem[e].getBoundingClientRect().bottom - elem[e].getBoundingClientRect().top)/2);
+						//let borderDist = 200;
 						if (timer>-1){
 							randomTop = clampNumber(parseInt(elem[e].style.top) + getRandomNumber(-30, 30),0 , playarea.offsetHeight - elem[e].offsetHeight);
 							randomLeft = clampNumber(parseInt(elem[e].style.left) + getRandomNumber(-30, 30), 0 ,playarea.offsetWidth - elem[e].offsetWidth);
@@ -232,32 +265,32 @@
 				}
 				
 				
-			async function UpdateScoreBoard(button){ //punctuation clicked - update SCOREBOARD - spawn new punctuation
+			async function UpdateScoreBoard(punc){ //punctuation clicked - update SCOREBOARD - spawn new punctuation
 				if(timer<-1){
 					return;
 				}
 				window?.navigator?.vibrate?.(1);
 				
-				clearInterval(elem[button].movementClock);
-				switch (elem[button].innerHTML){
-					case ".": //period
+				clearInterval(punc.movementClock);
+				switch (true) {
+					case punc.classList.contains("period"): //period
 						score = score + 10*scaler;
-						elem[button].classList.remove("period");
+						punc.classList.remove("period");
 						
 						break;
-					case "?": //question
+					case punc.classList.contains("question"):
 						score = score + 25*scaler;
-						elem[button].classList.remove("question");
+						punc.classList.remove("question");
 						
 						break;
-					case "!": //exclamation
+					case punc.classList.contains("exclamation"):
 						score = score + 50*scaler;
-						elem[button].classList.remove("exclamation");
+						punc.classList.remove("exclamation");
 						
 						break;
-					case "?!": //interrobang
+					case punc.classList.contains("interro"):
 						score = score + 100*scaler;
-						elem[button].classList.remove("interro");
+						punc.classList.remove("interro");
 						
 						break;
 				}
@@ -272,11 +305,11 @@
 						}
 						
 					}
-				elem[button].id = "disabled";
-				elem[button].innerHTML = " ";
+				punc.id = "clicked";
+				//elem[button].innerHTML = " ";
 				
 				document.getElementById("score").innerHTML = "Score: ".bold() + score;
-				Movebutton(button);
+				
 			}
 			
 			function startTimer(display) {  //TIMER
@@ -304,13 +337,17 @@
 			}
 			function spawnComma(){  //COMMA MULTIPLYER
 				console.log("comma spawned");
-				var comma = document.createElement("span")
-				//document.body.appendChild(comma);
+				let comma = document.createElement('canvas');
+				comma.width = SPRITE_SIZE;
+				comma.height = SPRITE_SIZE;
+				let ctx = comma.getContext('2d');
+		
+				let i = getRandomNumber(0, 4);
+				let selectedImage = PImages.comma;
+				ctx.drawImage(selectedImage, 0, 0, SPRITE_SIZE, SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 				document.getElementById("playarea").appendChild(comma);
 				comma.classList.add("button");
-				comma.style.color = "red";
-				comma.style.padding = "0px 50px 30px 50px";
-				comma.innerHTML = ","
+				comma.classList.add("comma");
 				comma.id = "enabled";
 				winWidth = playarea.offsetWidth - comma.offsetWidth;
 				winHeight = playarea.offsetHeight - comma.offsetHeight;
@@ -320,19 +357,19 @@
 				comma.style.left = randomLeft + "px";
 				comma.style.zIndex = 2;
 				comma.addEventListener("click", function(){
-					this.remove();
+					AnimatePop(comma);
 					scaler = clampNumber(scaler*2,1,4);
 					commaHit = commaHit++;
 					var shadowdist = function(a){ return "0px 0px "+((a)**2)+ "px red";};
 					
 					for(let i=0;i<maxPuncs;i++){
-						elem[i].style.textShadow = shadowdist(scaler);
+						elem[i].style.setProperty("-webkit-filter", "drop-shadow("+ shadowdist(scaler) + ")");
 					}
 					
 					setTimeout(function () {
 						scaler = clampNumber(scaler/2,1,4);
 						for(let i=0;i<maxPuncs;i++){
-							elem[i].style.textShadow = shadowdist(scaler);
+							elem[i].style.setProperty("-webkit-filter", "drop-shadow("+ shadowdist(scaler) + ")");
 						}
 					},5000);
 				});
@@ -346,43 +383,50 @@
 				
 				
 					for(let butcount = 0; butcount < maxPuncs; butcount++) {
-						let elem = document.createElement('canvas');
-						elem.width = SPRITE_SIZE;
-						elem.height = SPRITE_SIZE;
-						let ctx = elem.getContext('2d');
-				
+						elem.push(document.createElement('canvas'));
+						elem[butcount].width = SPRITE_SIZE;
+						elem[butcount].height = SPRITE_SIZE;
+						let ctx = elem[butcount].getContext('2d');
 						let i = getRandomNumber(0, 4);
 						let selectedImage;
 				
-						switch (i) {
-							case 0:
-								selectedImage = images.period;
+						switch (i){
+							case 0: //period
+								elem[butcount].classList.add("period");
+								//fontS = getRandomNumber(12,24);
+								selectedImage = PImages.period;
 								break;
-							case 1:
-								selectedImage = images.question;
+							case 1: //question
+								elem[butcount].classList.add("question");
+								//fontS = getRandomNumber(12,22);
+								selectedImage = PImages.question;
 								break;
-							case 2:
-								selectedImage = images.exclaim;
+							case 2: //exclamation
+								elem[butcount].classList.add("exclamation");
+								//fontS = getRandomNumber(12,20);
+								selectedImage = PImages.exclaim;
 								break;
-							case 3:
-								selectedImage = images.interro;
+							case 3: //interrobang
+								elem[butcount].classList.add("interro");
+								//fontS = getRandomNumber(12,18);
+								selectedImage = PImages.interro;
 								break;
 						}
 				
 						ctx.drawImage(selectedImage, 0, 0, SPRITE_SIZE, SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
 				
-						document.getElementById("playarea").appendChild(elem);
+						document.getElementById("playarea").appendChild(elem[butcount]);
 				
-						elem.classList.add("button");
-						elem.id = "enabled";
+						elem[butcount].classList.add("button");
+						elem[butcount].id = "enabled";
 				
 						let winWidth = playarea.offsetWidth - SPRITE_SIZE;
 						let winHeight = playarea.offsetHeight - SPRITE_SIZE;
 						let randomTop = getRandomNumber(0, winHeight);
 						let randomLeft = getRandomNumber(0, winWidth);
 				
-						elem.style.top = randomTop + "px";
-						elem.style.left = randomLeft + "px";
+						elem[butcount].style.top = randomTop + "px";
+						elem[butcount].style.left = randomLeft + "px";
 					}
 				
 			}

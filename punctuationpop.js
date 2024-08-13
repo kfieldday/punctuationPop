@@ -17,7 +17,7 @@
 			var IInterro = new Image();
 			IInterro.src =  './INTERRO_SPRITE_SHEET.png';
 			IInterro.crossOrigin = "anonymous";
-			
+			console.log("test");
 			
 			const TimeBonus = 2;
 			const playarea = document.getElementById("playarea");
